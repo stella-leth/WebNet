@@ -8,14 +8,16 @@ class Web(nn.Module):
     self.output_size=output_size
     for _ in range(node_num):
       self.neurons.append(Neuron(dim, synapse_per_node))
+      
   def dist_mask(self): # Reduce computational cost.
+    
   def step(self): # Step 1 timestep. Activate all Neurons, and exchange signals.
     buffer=[]
     for nr in self.neurons:
-      buffer.append(nr.activate())
+      buffer.append(nr.activate()) # Append synapse state and synapse position.
     for buff in buffer:
       for nr in self.neurons:
-        nr(buff)
+        nr(buff) # Send signal to all other neurons. If you got memory issues, use dist_mask().
       
   def set_input(self, data): # Set input to input node.
     for i in range(input_size):
