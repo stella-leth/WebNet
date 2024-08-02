@@ -29,10 +29,12 @@ class Web(nn.Module):
 class Neuron(nn.Module):
   def __init__(self, dim, synapse_num):
     self.synapse_num=synapse_num
-    self.decay=torch.randn(1)
-    self.Hpos=torch.randn(dim)
-    self.Spos=torch.randn(synapse_num, dim)
-    self.Sw=torch.randn(synapse_num)
+    self.decay=nn.Parameter(torch.randn(1))
+    self.Hpos=nn.Parameter(torch.randn(dim))
+    self.Spos=nn.Parameter(torch.randn(synapse_num, dim))
+    self.Sw=nn.Parameter(torch.randn(synapse_num))
+    self.dim=dim
+    
     self.Hstat=torch.zeros(0)
   def set(self, sign):
     self.Hstat=self.Hstat*self.decay + sign
