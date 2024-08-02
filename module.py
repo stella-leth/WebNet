@@ -19,11 +19,16 @@ class Web(nn.Module):
       for nr in self.neurons:
         nr.step(buff) # Send signal to all other neurons. If you got memory issues, use dist_mask().
       
-  def set_input(self, data): # Set input to input node.
-    for i in range(input_size):
-      self.neurons[i].sets(data[0])
+  def set_input(self, signal, sign_position): # Set input to input node.
+    for i in range(self.input_size):
+      self.neurons[i].sets(signal, sign_position)
       
   def get_output(self): # Get output from output node.
+    output=[]
+    for i in range(self.output_size):
+      self.output.append(self.neurons[-i-1].Hstat)
+    output=torch.cat(output, dim=1)
+    return output
   def update(self): # Update synapse position and weight. Oftenly update head position. It is caused by relationship between synapse state and target head state.
     
 class Neuron(nn.Module):
