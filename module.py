@@ -48,4 +48,4 @@ class Neuron(nn.Module):
     self.Sstat=self.Hstat*self.Sw
     
   def activate(self):
-    return self.
+    return self.Sstat, self.Spos
