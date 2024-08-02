@@ -21,7 +21,7 @@ class Web(nn.Module):
       
   def set_input(self, data): # Set input to input node.
     for i in range(input_size):
-      self.neurons[i].set(data[0])
+      self.neurons[i].sets(data[0])
       
   def get_output(self): # Get output from output node.
   def update(self): # Update synapse position and weight. Oftenly update head position. It is caused by relationship between synapse state and target head state.
@@ -36,9 +36,8 @@ class Neuron(nn.Module):
     self.dim=dim
     
     self.Hstat=torch.zeros(0)
-  def set(self, sign):
-    self.Hstat=self.Hstat*self.decay + sign
-    self.Sstat=self.Hstat*self.Sw
+  def sets(self, sign):
+    self.Hstat=sign  
   def step(self, sign, sign_pos):
     lensq=torch.zeros(1)
     for i in range(self.dim):
@@ -47,7 +46,6 @@ class Neuron(nn.Module):
 
     self.Hstat=self.Hstat*self.decay + sign
     self.Sstat=self.Hstat*self.Sw
-  def forward(self, sign):
-    Spos=sign
+    
   def activate(self):
     return self.
