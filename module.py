@@ -17,7 +17,7 @@ class Web(nn.Module):
       buffer.append(nr.activate()) # Append synapse state and synapse position.
     for buff in buffer:
       for nr in self.neurons:
-        nr(buff) # Send signal to all other neurons. If you got memory issues, use dist_mask().
+        nr.step(buff) # Send signal to all other neurons. If you got memory issues, use dist_mask().
       
   def set_input(self, data): # Set input to input node.
     for i in range(input_size):
@@ -35,6 +35,14 @@ class Neuron(nn.Module):
     self.Sw=torch.randn(synapse_num)
     self.Hstat=torch.zeros(0)
   def set(self, sign):
+    self.Hstat=self.Hstat*self.decay + sign
+    self.Sstat=self.Hstat*self.Sw
+  def step(self, sign, sign_pos):
+    lensq=torch.zeros(1)
+    for i in range(self.dim):
+        lensq+=torch.square(self.pos[i]-sign_pos[i])
+    sign=torch.div(sign, lensq)
+
     self.Hstat=self.Hstat*self.decay + sign
     self.Sstat=self.Hstat*self.Sw
   def forward(self, sign):
